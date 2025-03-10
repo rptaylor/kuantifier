@@ -48,8 +48,8 @@ containerSecurityContext:
 
 processor:
   image_repository: "hub.opensciencegrid.org/iris-hep/kuantifier-processor"
-  # Optionally overwrite container version. Default is chart appVersion.
-  image_tag: ""
+  # Optionally overwrite container version.
+  image_tag: "1.0.0"
   image_pull_policy: "IfNotPresent"
   resources:
     # very generous estimate: approx 10 KiB memory per job record
@@ -94,8 +94,8 @@ ssmsend:
   enabled: true
   # Location of ssmsend container. Feel free to instead build your own using the provided Containerfile.
   image_repository: "git.computecanada.ca:4567/rptaylor/misc/ssmsend"
-  # Optionally overwrite container version. Default is chart appVersion.
-  image_tag: ""
+  # Optionally overwrite container version.
+  image_tag: "3.3.1"
   host: "msg.argo.grnet.gr"
   # base64-encoded strings of the X509 public cert and private key for APEL publisher.
   # Using a base64 encoded string with no line breaks avoids issues of indentation and double YAML encoding if Ansible is used for Helm.
@@ -112,8 +112,8 @@ gratia:
       memory: "50Mi"
   # Location of gratia output container.
   image_repository: "hub.opensciencegrid.org/iris-hep/kuantifier-gratia-output"
-  # Optionally overwrite container version. Default is chart appVersion.
-  image_tag: ""
+  # Optionally overwrite container version.
+  image_tag: "1.0.0"
   # Config options for Gratia.
   config: 
     # Location of the Gratia probe config file. Can usually be kept as default

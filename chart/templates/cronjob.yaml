@@ -72,7 +72,7 @@ spec:
                 name: {{ .Release.Name }}-manual-records
           initContainers:
             - name: processor
-              image: {{ .Values.processor.image_repository }}:{{ .Values.processor.image_tag | default .Chart.Version }}
+              image: {{ .Values.processor.image_repository }}:{{ .Values.processor.image_tag }}
               imagePullPolicy: {{ .Values.processor.image_pull_policy }}
               workingDir: /src
               command: [ "python3" ]
@@ -119,7 +119,7 @@ spec:
           containers:
           {{ if eq .Values.outputFormat "gratia" }}
             - name: gratia-output
-              image: {{ .Values.gratia.image_repository}}:{{ .Values.gratia.image_tag | default .Chart.Version }}
+              image: {{ .Values.gratia.image_repository}}:{{ .Values.gratia.image_tag }}
               workingDir: /gratia
               command: [ "python3" ]
               args: [ "kubernetes_meter.py" ]
@@ -133,7 +133,7 @@ spec:
                   mountPath: /srv/kapel
           {{ else }}
             - name: ssmsend
-              image: {{ .Values.ssmsend.image_repository }}:{{ .Values.ssmsend.image_tag | default .Chart.AppVersion }}
+              image: {{ .Values.ssmsend.image_repository }}:{{ .Values.ssmsend.image_tag }}
               resources:
                 {{- toYaml .Values.ssmsend.resources | nindent 16 }}
               command: ["/bin/bash"]
