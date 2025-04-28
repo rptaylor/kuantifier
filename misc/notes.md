@@ -14,7 +14,14 @@ buildah login $registry
 buildah push $imageid $registry/ssmsend:$tag
 ```
 
-# Build and publish Helm chart to repository
+# Build and publish Helm chart to repository (new automated way)
+- Update Chart.yaml as needed
+- Make sure you have checked out the desired branch and pulled the commit (typically after squashing/merging)
+- `git tag vX.Y.Z`
+- `git push origin tag vX.Y.Z`
+- Update https://github.com/osg-htc/helm-charts/blob/main/supported/iris-hep/kuantifier/build-config.json with the new version.
+
+# Build and publish Helm chart to repository (old manual way)
 - First remember to update Chart.yaml with a new version (potentially appVersion too)
 - Copy the chart dir out of the git repo
 - `git checkout gh-pages`
