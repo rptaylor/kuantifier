@@ -95,7 +95,7 @@ ssmsend:
   # Location of ssmsend container. Feel free to instead build your own using the provided Containerfile.
   image_repository: "git.computecanada.ca:4567/rptaylor/misc/ssmsend"
   # Optionally overwrite container version.
-  image_tag: "3.3.1"
+  image_tag: "3.4.1"
   host: "msg.argo.grnet.gr"
   # base64-encoded strings of the X509 public cert and private key for APEL publisher.
   # Using a base64 encoded string with no line breaks avoids issues of indentation and double YAML encoding if Ansible is used for Helm.
