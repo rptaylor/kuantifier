@@ -20,6 +20,7 @@ buildah push $imageid $registry/ssmsend:$tag
 - `git tag vX.Y.Z`
 - `git push origin tag vX.Y.Z`
 - Update https://github.com/osg-htc/helm-charts/blob/main/supported/iris-hep/kuantifier/build-config.json with the new version.
+- Then the image will be published to `oci://hub.opensciencegrid.org/iris-hep/kuantifier:X.Y.Z` (note the `v` is removed)
 
 # Build and publish Helm chart to repository (old manual way)
 - First remember to update Chart.yaml with a new version (potentially appVersion too)
