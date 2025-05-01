@@ -52,7 +52,7 @@ spec:
                 name: {{ .Release.Name }}-ssmsend-config
             - name: ssmsend-secret-volume
               secret:
-                secretName: {{ .Release.Name }}-ssmsend-secret
+                secretName: {{ .Values.ssmsend.existingSecret | default (printf "%s-ssmsend-secret" .Release.Name) }}
                 defaultMode: 0400
             {{ end }}
             {{ if .Values.gridSecurityHostPath }}
