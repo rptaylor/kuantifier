@@ -1,6 +1,6 @@
 {{- if .Values.extraObjects }}
-{{- range $resource := .Values.extraObjects }}
+{{- range .Values.extraObjects }}
 ---
-{{ toYaml $resource }}
+{{- tpl (toYaml .) $ | nindent 0 }}
 {{- end }}
 {{- end }}
