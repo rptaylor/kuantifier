@@ -64,7 +64,8 @@ below.
     * `BENCHMARK_VALUE`: The value to use for normalizing by CPU performance. Required for APEL accounting.
   * `.prometheus_auth`: If your Prometheus instance is configured to require [Authentication](https://prometheus.io/docs/prometheus/latest/configuration/https/)
     from within the cluster, specify a Secret containing a value for the authentication header.
- 
+* `.Values.extraObjects`: A list of additional Kubernetes objects to be deployed by the chart. Each item in the list should be a complete Kubernetes resource definition.
+
 #### Gratia Output Configuration
 
 The following values only apply if `.Values.outputFormat` equals `"gratia"`:
