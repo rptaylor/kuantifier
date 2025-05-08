@@ -1,4 +1,3 @@
----
 {{- if .Values.extraObjects }}
 {{- range $resource := .Values.extraObjects }}
 ---
