@@ -22,6 +22,7 @@ from shutil import copyfile
 from KAPELConfig import KAPELConfig
 from prometheus_api_client import PrometheusConnect
 from dirq.QueueSimple import QueueSimple
+import jwt
 
 # for debugging
 #import code
@@ -296,6 +297,25 @@ def record_individual_period(config, results):
         print(f"WARNING: Skipped {skipped_records} records due to missing processor count. "
                "Please set pod resource requests or specify the PROCESSORS config var.")
 
+
+def get_auth_headers(config):
+    """ Check if an authentication secret has been configured via .Values.prometheus.auth,
+    and create an appropriate authentication header string if present
+    """
+
+    if not config.auth_header:
+        return None
+
+    # Check if the config is a JWT - prepend "Bearer" if so
+    try:
+        jwt.decode(config.auth_header, options={"verify_signature": False})
+        return {"Authorization": f"Bearer {config.auth_header}" }
+    except Exception as e:
+        pass
+
+    # Otherwise, assume the passed auth_header should be formatted as-is
+    return {"Authorization": config.auth_header }
+
 # process a time period (do prom query, process data, write output)
 # takes a KAPELConfig object and one element of output from get_time_periods
 # Remember Prometheus queries go backwards: the time instant is the end, go backwards from there.
@@ -309,7 +329,7 @@ def process_period(config, period):
 
     # SSL generally not used for Prometheus access within a cluster
     # Docs on instant query API: https://prometheus.io/docs/prometheus/latest/querying/api/#instant-queries
-    headers = {"Authorization": config.auth_header } if config.auth_header else None
+    headers = get_auth_headers(config)
     prom = PrometheusConnect(url=config.prometheus_server, disable_ssl=True, headers=headers)
     prom_connect_params = {'time': period['instant'].isoformat(), 'timeout': config.query_timeout}
 

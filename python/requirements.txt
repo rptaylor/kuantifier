@@ -7,3 +7,5 @@ prometheus-api-client
 # For Prometheus API queries - not needed anymore if we use API lib instead
 #requests
 
+# For evaluating whether credentials are JWTs
+pyjwt[crypto]
