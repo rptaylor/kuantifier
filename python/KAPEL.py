@@ -299,7 +299,7 @@ def record_individual_period(config, results):
 
 
 def get_auth_headers(config):
-    """ Check if an authentication secret has been configured via .Values.prometheus.auth,
+    """ Check if an authentication secret has been configured via .Values.processor.prometheus_auth
     and create an appropriate authentication header string if present
     """
 
