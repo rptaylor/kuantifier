@@ -49,7 +49,7 @@ containerSecurityContext:
 processor:
   image_repository: "hub.opensciencegrid.org/iris-hep/kuantifier-processor"
   # Optionally overwrite container version.
-  image_tag: "1.0.0"
+  image_tag: "1.0.1"
   image_pull_policy: "IfNotPresent"
   resources:
     # very generous estimate: approx 10 KiB memory per job record
@@ -117,7 +117,7 @@ gratia:
   # Location of gratia output container.
   image_repository: "hub.opensciencegrid.org/iris-hep/kuantifier-gratia-output"
   # Optionally overwrite container version.
-  image_tag: "1.0.0"
+  image_tag: "1.0.1"
   # Config options for Gratia.
   config: 
     # Location of the Gratia probe config file. Can usually be kept as default
