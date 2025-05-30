@@ -39,21 +39,21 @@ class QueryLogic:
         # Format: https://prometheus.io/docs/prometheus/latest/querying/basics/#time-durations
 
         # Select the 'max_over_time' of each metric in the query range. The metrics we're looking at are constants that will not vary over time,
-        # but selecting the max returns just one single point (instead of a list of multiple identical points) from each potentially non-aligned metric set.
-        # On the CPU core side, some pods don't share all the same labels: pods that haven't yet gotten scheduled to a node don't have the node label,
+        # but selecting the max returns just one single record (instead of a list of multiple identical records) from each potentially non-aligned metric set.
+        # Also, in the case of a pod that runs multiple times (e.g. because it failed and was restarted), using max_over_time of the start time ensures
+        # that the last (and therefore presumably successful) occurrence is used.
+        # On the CPU core side, some pod records don't share all the same labels: pods that haven't yet gotten scheduled to a node don't have the node label,
         # so we filter out the rows where it's null with '{node != ""}'
-
-        # The 'instance' label in Prometheus actually represents the IP and port of the KSM pod that Prometheus retrieved the metric from.
-        # When KSM is redeployed (or if the KSM deployment has > 1 pod), the 'instance' label may have different values,
-        # which would cause label matching problems, so we use 'without' to exclude instance.
-        # Sometimes a pod can fail and be restarted on a different node. Using max_over_time on starttime ensures that the latest start time is used.
-        # However this also results in duplicate CPU core records on all the nodes where the pod ran, so use 'without' to also exclude the
-        # node name and avoid many-to-many matching errors in the cputime query (duplicates in the cores query are collapsed by the rearrange function).
+        # Use 'max by (pod, uid)' to filter out extraneous labels that can cause duplicate metrics and many-to-many matching errors. Examples of such labels:
+        # - 'instance', 'job', 'service': these pertain to the specific KSM pod (and the monitoring stack that it belongs to) that Prometheus fetched the metric from.
+        #   Duplicated in situations such as a KSM pod restart, a KSM deployment with >1 pod, or migrating from one monitoring stack to another.
+        # - 'node': this produces duplicates when a pod runs on multiple nodes (e.g. because it failed and was restarted).
         # Also, use the 'max' aggregation operator (which only takes a scalar) on the result of max_over_time
         # (which takes a range and returns a scalar), and as a result get the whole metric set. Finally, use group_left for many-to-one matching.
         # https://prometheus.io/docs/prometheus/latest/querying/operators/#aggregation-operators
         # https://prometheus.io/docs/prometheus/latest/querying/operators/#many-to-one-and-one-to-many-vector-matches
-        self.cputime = f'(max_over_time(kube_pod_completion_time{{namespace="{namespace}"}}[{queryRange}]) - max_over_time(kube_pod_start_time{{namespace="{namespace}"}}[{queryRange}])) * on (pod) group_left() max without (instance, node) (max_over_time(kube_pod_container_resource_requests{{resource="cpu", node != "", namespace="{namespace}"}}[{queryRange}]))'
+        self.cputime = f'(max_over_time(kube_pod_completion_time{{namespace="{namespace}"}}[{queryRange}]) - max_over_time(kube_pod_start_time{{namespace="{namespace}"}}[{queryRange}])) * on (pod) group_left() max by (pod, uid) (max_over_time(kube_pod_container_resource_requests{{resource="cpu", node != "", namespace="{namespace}"}}[{queryRange}]))'
+        # These queries may produce duplicate metrics for the same pod but they get collapsed by the rearrange function.
         self.endtime = f'max_over_time(kube_pod_completion_time{{namespace="{namespace}"}}[{queryRange}])'
         self.starttime = f'max_over_time(kube_pod_start_time{{namespace="{namespace}"}}[{queryRange}])'
         self.cores = f'max_over_time(kube_pod_container_resource_requests{{resource="cpu", node != "", namespace="{namespace}"}}[{queryRange}])'

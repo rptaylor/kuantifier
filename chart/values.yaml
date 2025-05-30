@@ -49,7 +49,7 @@ containerSecurityContext:
 processor:
   image_repository: "hub.opensciencegrid.org/iris-hep/kuantifier-processor"
   # Optionally overwrite container version.
-  image_tag: "1.0.1"
+  image_tag: "1.0.2"
   image_pull_policy: "IfNotPresent"
   resources:
     # very generous estimate: approx 10 KiB memory per job record
