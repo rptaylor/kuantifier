@@ -8,7 +8,7 @@ These times must be in ISO 8601 format to avoid complications with time zones an
 The timezone should be specified, and it should be UTC for consistency with the auto publishing mode.
 
 Note: In the case of APEL, since only APEL summary records are supported (not individual job records),
-if you specify QUERY_START as a time that is not precisely the beginning of a month,
+if you specify `QUERY_START` as a time that is not precisely the beginning of a month,
 a partial month summary record will be produced and published.
 The APEL server may ignore it if it already has a more complete summary record for that month containing more jobs.
 Therefore when using gap mode, you should most likely make sure that `QUERY_START` is precisely the beginning of a month
