@@ -3,6 +3,7 @@
 The default behaviour ("auto" mode) is to publish records for the previous month, and up to the current day of the current month.
 If `PUBLISHING_MODE` is set to "gap" instead, then a fixed time period will be queried,
 and the start and end of that period must be specified via `QUERY_START` and `QUERY_END` respectively.
+The purpose of this is typically to republish records for a period of time when the auto mode was not running correctly.
 These times must be in ISO 8601 format to avoid complications with time zones and leap seconds.
 The timezone should be specified, and it should be UTC for consistency with the auto publishing mode.
 
@@ -15,7 +16,8 @@ in order to produce a complete summary record for that month which will take pre
 any other records containing fewer jobs that may have already been published.
 The same applies for `QUERY_END` matching the end of the month (unless it is the current month at the time of publishing,
 in which case a subsequent run in auto mode will eventually complete the records for this month).
-So, `QUERY_START` (and possibly `QUERY_END`) should look like e.g. 'YYYY-MM-01T00:00:00+00:00' for a given year "YYYY" and month "MM".
+So, `QUERY_START` (and possibly `QUERY_END`) should each look like e.g. 'YYYY-MM-01T00:00:00+00:00'
+for a given year "YYYY" and month "MM".
 
 # Validation
 
